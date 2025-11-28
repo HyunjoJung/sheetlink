@@ -110,6 +110,9 @@
     <script src="@Assets["lib/bootstrap/dist/js/bootstrap.bundle.min.js"]"></script>
     <script src="@Assets["_framework/blazor.web.js"]"></script>
     <script>
+        // Store files to prevent loss during Blazor re-rendering
+        const fileStore = {};
+
         function downloadFile(fileName, base64) {
             const link = document.createElement('a');
             link.href = 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' + base64;
@@ -119,14 +122,37 @@
             document.body.removeChild(link);
         }
 
-        async function uploadFile(inputId, url) {
+        // Setup file input to store file immediately on selection
+        function setupFileInput(inputId) {
             const input = document.getElementById(inputId);
-            if (!input || !input.files || !input.files[0]) {
+            if (input && !input.dataset.initialized) {
+                input.dataset.initialized = 'true';
+                input.addEventListener('change', function() {
+                    if (this.files && this.files[0]) {
+                        fileStore[inputId] = this.files[0];
+                    }
+                });
+            }
+        }
+
+        async function uploadFile(inputId, url) {
+            // Try to get file from store first, then from input
+            let file = fileStore[inputId];
+
+            if (!file) {
+                const input = document.getElementById(inputId);
+                if (input && input.files && input.files[0]) {
+                    file = input.files[0];
+                    fileStore[inputId] = file;
+                }
+            }
+
+            if (!file) {
                 return { Error: 'Please select a file.' };
             }
 
             const formData = new FormData();
-            formData.append('file', input.files[0]);
+            formData.append('file', file);
             formData.append('columnName', 'Title');
 
             try {
@@ -141,6 +167,9 @@
                     return { Error: data.error || data.Error || 'Server error occurred.' };
                 }
 
+                // Clear stored file after successful upload
+                delete fileStore[inputId];
+
                 return data;
             } catch (error) {
                 return { Error: 'Network error: ' + error.message };
@@ -148,8 +177,27 @@
         }
 
         function getFileName(inputId) {
+            // Try to get filename from store first
+            if (fileStore[inputId]) {
+                return fileStore[inputId].name;
+            }
+
             const input = document.getElementById(inputId);
             return input && input.files && input.files[0] ? input.files[0].name : '';
+        }
+
+        // Initialize file inputs on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setupFileInput('fileInput');
+            setupFileInput('mergeFileInput');
+        });
+
+        // Re-initialize after Blazor updates
+        if (window.Blazor) {
+            window.Blazor.addEventListener('enhancedload', function() {
+                setupFileInput('fileInput');
+                setupFileInput('mergeFileInput');
+            });
         }
 
         async function createMergedExcel(titles, urls) {
