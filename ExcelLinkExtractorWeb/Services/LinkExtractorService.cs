@@ -53,7 +53,7 @@ public class LinkExtractorService
                 if (headerRowNumber != null) break;
             }
 
-            if (targetColumnIndex == null)
+            if (targetColumnIndex == null || headerRowNumber == null)
             {
                 result.ErrorMessage = $"Column '{linkColumnName}' not found.";
                 return result;
