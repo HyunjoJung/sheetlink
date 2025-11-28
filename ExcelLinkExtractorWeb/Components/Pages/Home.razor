@@ -1,8 +1,9 @@
 @page "/"
-@rendermode InteractiveServer
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @inject IJSRuntime JS
 @inject HttpClient Http
 @using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
 
 <PageTitle>SheetLink - Spreadsheet Hyperlink Extractor</PageTitle>
 

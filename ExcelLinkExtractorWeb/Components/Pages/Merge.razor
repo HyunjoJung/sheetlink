@@ -1,8 +1,9 @@
 @page "/merge"
-@rendermode InteractiveServer
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @inject IJSRuntime JS
 @inject HttpClient Http
 @using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
 
 <PageTitle>SheetLink - Link Merger</PageTitle>
 
