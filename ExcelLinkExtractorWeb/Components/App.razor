@@ -5,6 +5,27 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/" />
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Free online tool to extract hyperlinks from Excel files and merge Title + URL into clickable links. No file upload to server." />
+    <meta name="keywords" content="Excel, hyperlink, extractor, URL, link, merge, xlsx, spreadsheet, free tool" />
+    <meta name="author" content="ExcelLinkTools" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Excel Link Tools - Extract & Merge Hyperlinks" />
+    <meta property="og:description" content="Free online tool to extract hyperlinks from Excel files and merge Title + URL into clickable links." />
+    <meta property="og:image" content="/og-image.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Excel Link Tools - Extract & Merge Hyperlinks" />
+    <meta name="twitter:description" content="Free online tool to extract hyperlinks from Excel files and merge Title + URL into clickable links." />
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://junghyunjo.uk/" />
+
     <ResourcePreloader />
     <link rel="stylesheet" href="@Assets["lib/bootstrap/dist/css/bootstrap.min.css"]" />
     <link rel="stylesheet" href="@Assets["app.css"]" />
@@ -12,6 +33,30 @@
     <ImportMap />
     <link rel="icon" type="image/png" href="favicon.png" />
     <HeadOutlet />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "WebApplication",
+        "name": "Excel Link Tools",
+        "description": "Free online tool to extract hyperlinks from Excel files and merge Title + URL into clickable links",
+        "url": "https://junghyunjo.uk/",
+        "applicationCategory": "Utility",
+        "operatingSystem": "Any",
+        "offers": {
+            "@@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": [
+            "Extract hyperlinks from Excel files",
+            "Merge Title and URL into hyperlinks",
+            "Download processed Excel files",
+            "No server storage - privacy focused"
+        ]
+    }
+    </script>
 </head>
 
 <body>
