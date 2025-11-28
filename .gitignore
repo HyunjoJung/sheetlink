@@ -1,0 +1,28 @@
+# .NET
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+
+# IDE
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+
+# NuGet
+*.nupkg
+packages/
+
+# 엑셀 데이터 파일 (개인정보 보호)
+*.xlsx
+*.xls
+
+# OS
+Thumbs.db
+.DS_Store
