@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://excellink.hyunjo.uk/sitemap.xml
+Sitemap: https://sheetlink.hyunjo.uk/sitemap.xml

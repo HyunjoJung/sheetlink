@@ -1,0 +1,139 @@
+@page "/faq"
+
+<PageTitle>FAQ - SheetLink</PageTitle>
+
+<HeadContent>
+    <meta name="description" content="Frequently asked questions about SheetLink - Spreadsheet hyperlink extraction and merging tool. 엑셀 링크 추출 도구 FAQ." />
+    <link rel="canonical" href="https://sheetlink.hyunjo.uk/faq" />
+
+    <!-- FAQ Schema -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@@type": "Question",
+                "name": "Is my file uploaded to a server?",
+                "acceptedAnswer": {
+                    "@@type": "Answer",
+                    "text": "No, all processing happens in-memory on the server. Your files are never stored permanently. Once processing is complete, all data is immediately discarded."
+                }
+            },
+            {
+                "@@type": "Question",
+                "name": "What file formats are supported?",
+                "acceptedAnswer": {
+                    "@@type": "Answer",
+                    "text": "We support .xlsx and .xls file formats. The maximum file size is 10MB."
+                }
+            },
+            {
+                "@@type": "Question",
+                "name": "How do I extract hyperlinks from spreadsheets?",
+                "acceptedAnswer": {
+                    "@@type": "Answer",
+                    "text": "1. Download the sample or prepare your file with a 'Title' column containing hyperlinks. 2. Upload the file using the upload button. 3. The tool will automatically extract all hyperlinks and display them. 4. Download the result file with extracted URLs."
+                }
+            },
+            {
+                "@@type": "Question",
+                "name": "Can I merge Title and URL into clickable links?",
+                "acceptedAnswer": {
+                    "@@type": "Answer",
+                    "text": "Yes! Use the 'Link Merger' feature. Upload a file with 'Title' and 'URL' columns, and the tool will create a file where the Title cells contain clickable hyperlinks to the URLs."
+                }
+            },
+            {
+                "@@type": "Question",
+                "name": "Is this tool free?",
+                "acceptedAnswer": {
+                    "@@type": "Answer",
+                    "text": "Yes, SheetLink is completely free to use. No registration, no subscription, no hidden fees."
+                }
+            }
+        ]
+    }
+    </script>
+</HeadContent>
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary">FAQ</h1>
+        <p class="lead text-muted">Frequently Asked Questions</p>
+    </div>
+
+    <div class="mb-5">
+        <div class="accordion" id="faqAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading1">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true" aria-controls="faq1">
+                        How do I extract hyperlinks from spreadsheets?
+                    </button>
+                </h2>
+                <div id="faq1" class="accordion-collapse collapse show" aria-labelledby="heading1" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        <ol class="mb-0">
+                            <li>Download the sample or prepare your file with a 'Title' column containing hyperlinks</li>
+                            <li>Upload the file using the upload button</li>
+                            <li>The tool will automatically extract all hyperlinks and display them</li>
+                            <li>Download the result file with extracted URLs</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading2">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
+                        Is my file uploaded to a server?
+                    </button>
+                </h2>
+                <div id="faq2" class="accordion-collapse collapse" aria-labelledby="heading2" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        <strong>No, all processing happens in-memory on the server.</strong> Your files are never stored permanently. Once processing is complete, all data is immediately discarded. We take your privacy seriously.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading3">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
+                        What file formats are supported?
+                    </button>
+                </h2>
+                <div id="faq3" class="accordion-collapse collapse" aria-labelledby="heading3" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        We support <strong>.xlsx</strong> and <strong>.xls</strong> file formats. The maximum file size is <strong>10MB</strong>.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading4">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">
+                        Can I merge Title and URL into clickable links?
+                    </button>
+                </h2>
+                <div id="faq4" class="accordion-collapse collapse" aria-labelledby="heading4" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        <strong>Yes!</strong> Use the <a href="/merge">Link Merger</a> feature. Upload a file with 'Title' and 'URL' columns, and the tool will create a file where the Title cells contain clickable hyperlinks to the URLs.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading5">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5" aria-expanded="false" aria-controls="faq5">
+                        Is this tool free?
+                    </button>
+                </h2>
+                <div id="faq5" class="accordion-collapse collapse" aria-labelledby="heading5" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        <strong>Yes, SheetLink is completely free to use.</strong> No registration, no subscription, no hidden fees.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

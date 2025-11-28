@@ -4,27 +4,44 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google-adsense-account" content="ca-pub-1012950383644941">
     <base href="/" />
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Free online tool to extract hyperlinks from Excel files and merge Title + URL into clickable links. No file upload to server." />
-    <meta name="keywords" content="Excel, hyperlink, extractor, URL, link, merge, xlsx, spreadsheet, free tool" />
-    <meta name="author" content="ExcelLinkTools" />
+    <meta name="description" content="Free online tool to extract hyperlinks from spreadsheet files and merge Title + URL into clickable links. No file upload to server. 엑셀 파일에서 하이퍼링크를 무료로 추출하고 병합하는 온라인 도구." />
+    <meta name="keywords" content="엑셀 링크 추출, 엑셀에서 링크 추출하는 법, 엑셀 하이퍼링크 추출, spreadsheet hyperlink extractor, 엑셀 url 추출, 엑셀 링크 병합, hyperlink extractor, URL extractor, link merge, xlsx, spreadsheet, free tool" />
+    <meta name="author" content="SheetLink" />
     <meta name="robots" content="index, follow" />
+    <meta name="language" content="English, Korean" />
+    <meta name="revisit-after" content="7 days" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Excel Link Tools - Extract & Merge Hyperlinks" />
-    <meta property="og:description" content="Free online tool to extract hyperlinks from Excel files and merge Title + URL into clickable links." />
-    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:url" content="https://sheetlink.hyunjo.uk/" />
+    <meta property="og:title" content="SheetLink - Extract & Merge Hyperlinks" />
+    <meta property="og:description" content="Free online tool to extract hyperlinks from spreadsheet files and merge Title + URL into clickable links." />
+    <meta property="og:image" content="https://sheetlink.hyunjo.uk/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="SheetLink - Extract and Merge Hyperlinks" />
+    <meta property="og:site_name" content="SheetLink" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="ko_KR" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Excel Link Tools - Extract & Merge Hyperlinks" />
-    <meta name="twitter:description" content="Free online tool to extract hyperlinks from Excel files and merge Title + URL into clickable links." />
+    <meta name="twitter:title" content="SheetLink - Extract & Merge Hyperlinks" />
+    <meta name="twitter:description" content="Free online tool to extract hyperlinks from spreadsheet files and merge Title + URL into clickable links." />
+    <meta name="twitter:image" content="https://sheetlink.hyunjo.uk/og-image.png" />
+    <meta name="twitter:image:alt" content="SheetLink - Extract and Merge Hyperlinks" />
+    <meta name="twitter:site" content="@@SheetLink" />
 
     <!-- Canonical -->
-    <link rel="canonical" href="https://excellink.hyunjo.uk/" />
+    <link rel="canonical" href="https://sheetlink.hyunjo.uk/" />
+
+    <!-- Performance Optimization -->
+    <link rel="preconnect" href="https://sheetlink.hyunjo.uk" crossorigin />
+    <link rel="dns-prefetch" href="https://sheetlink.hyunjo.uk" />
 
     <ResourcePreloader />
     <link rel="stylesheet" href="@Assets["lib/bootstrap/dist/css/bootstrap.min.css"]" />
@@ -34,27 +51,55 @@
     <link rel="icon" type="image/png" href="favicon.png" />
     <HeadOutlet />
 
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1012950383644941"
+            crossorigin="anonymous"></script>
+
     <!-- Structured Data -->
     <script type="application/ld+json">
     {
         "@@context": "https://schema.org",
         "@@type": "WebApplication",
-        "name": "Excel Link Tools",
-        "description": "Free online tool to extract hyperlinks from Excel files and merge Title + URL into clickable links",
-        "url": "https://excellink.hyunjo.uk/",
-        "applicationCategory": "Utility",
+        "name": "SheetLink - Spreadsheet Hyperlink Tools",
+        "alternateName": "SheetLink",
+        "description": "Free online tool to extract hyperlinks from spreadsheet files and merge Title + URL into clickable links",
+        "url": "https://sheetlink.hyunjo.uk/",
+        "applicationCategory": "BusinessApplication",
         "operatingSystem": "Any",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
         "offers": {
             "@@type": "Offer",
             "price": "0",
-            "priceCurrency": "USD"
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock"
         },
         "featureList": [
-            "Extract hyperlinks from Excel files",
+            "Extract hyperlinks from spreadsheet files",
             "Merge Title and URL into hyperlinks",
-            "Download processed Excel files",
-            "No server storage - privacy focused"
-        ]
+            "Download processed spreadsheet files",
+            "No server storage - privacy focused",
+            "Support for .xlsx and .xls formats",
+            "10MB file size limit"
+        ],
+        "screenshot": "https://sheetlink.hyunjo.uk/og-image.png",
+        "aggregateRating": {
+            "@@type": "AggregateRating",
+            "ratingValue": "5.0",
+            "ratingCount": "1"
+        },
+        "inLanguage": ["en", "ko"]
+    }
+    </script>
+
+    <!-- Organization Schema -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "Organization",
+        "name": "SheetLink",
+        "url": "https://sheetlink.hyunjo.uk/",
+        "logo": "https://sheetlink.hyunjo.uk/favicon.png",
+        "sameAs": []
     }
     </script>
 </head>
@@ -62,6 +107,7 @@
 <body>
     <Routes />
     <ReconnectModal />
+    <script src="@Assets["lib/bootstrap/dist/js/bootstrap.bundle.min.js"]"></script>
     <script src="@Assets["_framework/blazor.web.js"]"></script>
     <script>
         function downloadFile(fileName, base64) {

@@ -1,18 +1,17 @@
 @page "/"
 @inject IJSRuntime JS
-@rendermode InteractiveServer
 
-<PageTitle>Excel Hyperlink Extractor - Free Online Tool</PageTitle>
+<PageTitle>SheetLink - Spreadsheet Hyperlink Extractor</PageTitle>
 
 <HeadContent>
-    <meta name="description" content="Extract hyperlinks from Excel files for free. Upload your .xlsx file and download extracted URLs instantly. No registration required." />
-    <link rel="canonical" href="https://excellink.hyunjo.uk/" />
+    <meta name="description" content="Extract hyperlinks from spreadsheet files for free. Upload your .xlsx file and download extracted URLs instantly. No registration required." />
+    <link rel="canonical" href="https://sheetlink.hyunjo.uk/" />
 </HeadContent>
 
 <div class="container py-5">
     <div class="text-center mb-5">
-        <h1 class="display-4 fw-bold text-primary">Link Extractor</h1>
-        <p class="lead text-muted">Extract hyperlinks from Excel files easily</p>
+        <h1 class="display-4 fw-bold text-primary">SheetLink</h1>
+        <p class="lead text-muted">Extract hyperlinks from spreadsheet files easily</p>
     </div>
 
     @if (!string.IsNullOrEmpty(errorMessage))
@@ -101,9 +100,9 @@
                         <h5 class="mb-0">Step 1. Download Template</h5>
                     </div>
                     <div class="card-body text-center p-4">
-                        <p class="text-muted mb-4">Template with 'Title' column containing hyperlinks</p>
+                        <p class="text-muted mb-4">Sample file with 'Title' column containing hyperlinks</p>
                         <a href="/api/file/template" class="btn btn-outline-primary btn-lg" download>
-                            Download Template (.xlsx)
+                            Download Sample (.xlsx)
                         </a>
                     </div>
                 </div>
@@ -116,7 +115,7 @@
                         <h5 class="mb-0">Step 2. Upload File</h5>
                     </div>
                     <div class="card-body text-center p-4">
-                        <p class="text-muted mb-4">Upload your Excel file with hyperlinks</p>
+                        <p class="text-muted mb-4">Upload your spreadsheet file with hyperlinks</p>
                         <input type="file" id="fileInput" accept=".xlsx,.xls" class="form-control" style="max-width: 300px; margin: 0 auto;" />
                         <button class="btn btn-success btn-lg mt-3" @onclick="UploadFile">
                             Upload & Extract
@@ -132,11 +131,14 @@
             <div class="card-body">
                 <h5 class="card-title">How to Use</h5>
                 <ol class="mb-0">
-                    <li>Download the template or prepare your Excel file</li>
+                    <li>Download the sample or prepare your spreadsheet file</li>
                     <li>Add hyperlinks to the 'Title' column</li>
                     <li>Upload the file to extract links automatically</li>
                     <li>Download the result file</li>
                 </ol>
+                <div class="mt-3 text-center">
+                    <a href="/faq" class="btn btn-outline-primary">FAQ</a>
+                </div>
             </div>
         </div>
     }
