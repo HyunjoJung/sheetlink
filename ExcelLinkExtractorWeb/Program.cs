@@ -1,10 +1,15 @@
 using ExcelLinkExtractorWeb.Components;
+using ExcelLinkExtractorWeb.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddControllers();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+// LinkExtractor 서비스 등록
+builder.Services.AddScoped<LinkExtractorService>();
 
 var app = builder.Build();
 
@@ -20,7 +25,9 @@ app.UseHttpsRedirection();
 
 app.UseAntiforgery();
 
+app.UseStaticFiles();
 app.MapStaticAssets();
+app.MapControllers();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 

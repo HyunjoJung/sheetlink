@@ -1,0 +1,118 @@
+@page "/merge"
+@inject IJSRuntime JS
+@rendermode InteractiveServer
+
+<PageTitle>Link Merger - URL + Title</PageTitle>
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-success">Link Merger</h1>
+        <p class="lead text-muted">Combine Title and URL into hyperlinks</p>
+    </div>
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @errorMessage
+            <button type="button" class="btn-close" @onclick="() => errorMessage = null"></button>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @successMessage
+            <button type="button" class="btn-close" @onclick="() => successMessage = null"></button>
+        </div>
+    }
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0">Input Data</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Title Column</label>
+                    <textarea class="form-control" rows="10" @bind="titleInput" placeholder="Enter titles (one per line)&#10;&#10;Example:&#10;Google&#10;GitHub&#10;YouTube"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">URL Column</label>
+                    <textarea class="form-control" rows="10" @bind="urlInput" placeholder="Enter URLs (one per line)&#10;&#10;Example:&#10;https://google.com&#10;https://github.com&#10;https://youtube.com"></textarea>
+                </div>
+            </div>
+
+            <div class="mt-4 text-center">
+                <button class="btn btn-success btn-lg" @onclick="MergeAndDownload">
+                    Merge & Download Excel
+                </button>
+                <button class="btn btn-outline-secondary btn-lg ms-2" @onclick="Clear">
+                    Clear
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mt-4">
+        <div class="card-body">
+            <h5 class="card-title">How to use</h5>
+            <ol class="mb-0">
+                <li>Paste titles in the left column (one per line)</li>
+                <li>Paste URLs in the right column (one per line)</li>
+                <li>Click "Merge & Download Excel" to create hyperlinks</li>
+                <li>The output Excel will have clickable hyperlinks in the Title column</li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string titleInput = "";
+    private string urlInput = "";
+    private string? errorMessage;
+    private string? successMessage;
+
+    private async Task MergeAndDownload()
+    {
+        errorMessage = null;
+        successMessage = null;
+
+        var titles = titleInput.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                               .Select(t => t.Trim())
+                               .ToList();
+        var urls = urlInput.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                           .Select(u => u.Trim())
+                           .ToList();
+
+        if (titles.Count == 0 || urls.Count == 0)
+        {
+            errorMessage = "Please enter both titles and URLs.";
+            return;
+        }
+
+        if (titles.Count != urls.Count)
+        {
+            errorMessage = $"Title count ({titles.Count}) and URL count ({urls.Count}) must match.";
+            return;
+        }
+
+        try
+        {
+            var base64 = await JS.InvokeAsync<string>("createMergedExcel", titles, urls);
+            await JS.InvokeVoidAsync("downloadFile", "merged_links.xlsx", base64);
+            successMessage = $"Successfully created {titles.Count} hyperlinks!";
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error: {ex.Message}";
+        }
+    }
+
+    private void Clear()
+    {
+        titleInput = "";
+        urlInput = "";
+        errorMessage = null;
+        successMessage = null;
+    }
+}

@@ -1,19 +1,34 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+<div class="d-flex flex-column min-vh-100">
+    <!-- 상단 헤더 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="">
+                ExcelLinkTools
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link text-white" href="/">
+                    Extract Links
+                </a>
+                <a class="nav-link text-white" href="/merge">
+                    Merge Links
+                </a>
+            </div>
         </div>
+    </nav>
 
-        <article class="content px-4">
-            @Body
-        </article>
+    <!-- 메인 콘텐츠 -->
+    <main class="flex-grow-1">
+        @Body
     </main>
+
+    <!-- 푸터 -->
+    <footer class="bg-light py-3 mt-auto">
+        <div class="container text-center text-muted small">
+            &copy; 2024 LinkExtractor. 파일은 서버에 저장되지 않습니다.
+        </div>
+    </footer>
 </div>
 
 <div id="blazor-error-ui" data-nosnippet>
