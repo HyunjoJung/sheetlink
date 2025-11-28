@@ -1,7 +1,9 @@
 @page "/merge"
-@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@rendermode InteractiveServer
+@implements IDisposable
 @inject IJSRuntime JS
 @inject HttpClient Http
+@inject PersistentComponentState ApplicationState
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Web
 
@@ -127,11 +129,18 @@
                     </div>
                     <div class="card-body text-center p-4">
                         <p class="text-muted mb-4">Upload your Excel with Title and URL columns</p>
-                        <InputFile OnChange="HandleFileSelected" accept=".xlsx,.xls" class="form-control" style="max-width: 300px; margin: 0 auto;" />
-                        <button class="btn btn-primary btn-lg mt-3" @onclick="UploadFile" disabled="@(selectedFile == null)">
-                            Upload & Merge
-                        </button>
-                        <p class="mt-2 small text-muted">Max 10MB</p>
+                        @if (isInteractive)
+                        {
+                            <InputFile OnChange="HandleFileSelected" accept=".xlsx,.xls" class="form-control" style="max-width: 300px; margin: 0 auto;" />
+                            <button class="btn btn-primary btn-lg mt-3" @onclick="UploadFile" disabled="@(selectedFile == null)">
+                                Upload & Merge
+                            </button>
+                            <p class="mt-2 small text-muted">Max 10MB</p>
+                        }
+                        else
+                        {
+                            <div class="text-muted">Loading...</div>
+                        }
                     </div>
                 </div>
             </div>
@@ -156,12 +165,63 @@
 </div>
 
 @code {
+    private bool isInteractive = false;
     private bool isProcessing = false;
     private string? errorMessage;
     private MergeResult? result;
     private string? outputBase64;
     private string? originalFileName;
     private IBrowserFile? selectedFile;
+    private PersistingComponentStateSubscription persistingSubscription;
+
+    protected override void OnInitialized()
+    {
+        persistingSubscription = ApplicationState.RegisterOnPersisting(PersistData);
+
+        if (ApplicationState.TryTakeFromJson<MergeResult>("result", out var restoredResult))
+        {
+            result = restoredResult;
+        }
+        if (ApplicationState.TryTakeFromJson<string>("outputBase64", out var restoredBase64))
+        {
+            outputBase64 = restoredBase64;
+        }
+        if (ApplicationState.TryTakeFromJson<string>("originalFileName", out var restoredFileName))
+        {
+            originalFileName = restoredFileName;
+        }
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            isInteractive = true;
+            StateHasChanged();
+        }
+    }
+
+    private Task PersistData()
+    {
+        if (result != null)
+        {
+            ApplicationState.PersistAsJson("result", result);
+        }
+        if (outputBase64 != null)
+        {
+            ApplicationState.PersistAsJson("outputBase64", outputBase64);
+        }
+        if (originalFileName != null)
+        {
+            ApplicationState.PersistAsJson("originalFileName", originalFileName);
+        }
+        return Task.CompletedTask;
+    }
+
+    public void Dispose()
+    {
+        persistingSubscription.Dispose();
+    }
 
     private void HandleFileSelected(InputFileChangeEventArgs e)
     {
