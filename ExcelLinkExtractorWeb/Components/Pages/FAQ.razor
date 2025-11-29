@@ -71,6 +71,72 @@
         ]
     }
     </script>
+
+    <style>
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            margin-bottom: 1rem;
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            overflow: hidden;
+        }
+
+        .faq-item details {
+            background: white;
+        }
+
+        .faq-item summary {
+            cursor: pointer;
+            padding: 1rem 1.25rem;
+            font-weight: 600;
+            font-size: 1rem;
+            background: white;
+            list-style: none;
+            user-select: none;
+            transition: background-color 0.15s ease-in-out;
+        }
+
+        .faq-item summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .faq-item summary::before {
+            content: '▶';
+            display: inline-block;
+            margin-right: 0.5rem;
+            transition: transform 0.2s ease-in-out;
+            font-size: 0.75rem;
+        }
+
+        .faq-item details[open] summary::before {
+            transform: rotate(90deg);
+        }
+
+        .faq-item summary:hover {
+            background-color: #f8f9fa;
+        }
+
+        .faq-content {
+            padding: 1rem 1.25rem;
+            border-top: 1px solid #dee2e6;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </HeadContent>
 
 <div class="container py-5">
@@ -79,120 +145,90 @@
         <p class="lead text-muted">Frequently Asked Questions</p>
     </div>
 
-    <div class="mb-5">
-        <div class="accordion" id="faqAccordion">
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="heading1">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true" aria-controls="faq1">
-                        How do I extract hyperlinks from spreadsheets?
-                    </button>
-                </h2>
-                <div id="faq1" class="accordion-collapse collapse show" aria-labelledby="heading1" data-bs-parent="#faqAccordion">
-                    <div class="accordion-body">
-                        <ol class="mb-0">
-                            <li>Download the sample or prepare your file with a 'Title' column containing hyperlinks</li>
-                            <li>Upload the file using the upload button</li>
-                            <li>The tool will automatically extract all hyperlinks and display them</li>
-                            <li>Download the result file with extracted URLs</li>
-                        </ol>
-                    </div>
+    <div class="faq-list">
+        <div class="faq-item">
+            <details open>
+                <summary>How do I extract hyperlinks from spreadsheets?</summary>
+                <div class="faq-content">
+                    <ol class="mb-0">
+                        <li>Download the sample or prepare your file with a 'Title' column containing hyperlinks</li>
+                        <li>Upload the file using the upload button</li>
+                        <li>The tool will automatically extract all hyperlinks and display them</li>
+                        <li>Download the result file with extracted URLs</li>
+                    </ol>
                 </div>
-            </div>
+            </details>
+        </div>
 
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="heading2">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
-                        Is my file uploaded to a server?
-                    </button>
-                </h2>
-                <div id="faq2" class="accordion-collapse collapse" aria-labelledby="heading2" data-bs-parent="#faqAccordion">
-                    <div class="accordion-body">
-                        <strong>No, all processing happens in-memory on the server.</strong> Your files are never stored permanently. Once processing is complete, all data is immediately discarded. We take your privacy seriously.
-                        <div class="mt-3 p-3 bg-light rounded">
-                            <strong>🔍 Verify yourself:</strong> This is an open-source project. You can review the source code on GitHub to confirm that no files are saved to disk.
-                            <div class="mt-2">
-                                <a href="https://github.com/HyunjoJung/sheetlink" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-github me-1" viewBox="0 0 16 16">
-                                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-                                    </svg>
-                                    View Source Code on GitHub
-                                </a>
-                            </div>
+        <div class="faq-item">
+            <details>
+                <summary>Is my file uploaded to a server?</summary>
+                <div class="faq-content">
+                    <strong>No, all processing happens in-memory on the server.</strong> Your files are never stored permanently. Once processing is complete, all data is immediately discarded. We take your privacy seriously.
+                    <div class="mt-3 p-3 bg-light rounded">
+                        <strong>🔍 Verify yourself:</strong> This is an open-source project. You can review the source code on GitHub to confirm that no files are saved to disk.
+                        <div class="mt-2">
+                            <a href="https://github.com/HyunjoJung/sheetlink" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-github me-1" viewBox="0 0 16 16">
+                                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                                </svg>
+                                View Source Code on GitHub
+                            </a>
                         </div>
                     </div>
                 </div>
-            </div>
+            </details>
+        </div>
 
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="heading3">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
-                        What file formats are supported?
-                    </button>
-                </h2>
-                <div id="faq3" class="accordion-collapse collapse" aria-labelledby="heading3" data-bs-parent="#faqAccordion">
-                    <div class="accordion-body">
-                        We support <strong>.xlsx</strong> and <strong>.xls</strong> file formats. The maximum file size is <strong>10MB</strong>.
-                    </div>
+        <div class="faq-item">
+            <details>
+                <summary>What file formats are supported?</summary>
+                <div class="faq-content">
+                    We support <strong>.xlsx</strong> and <strong>.xls</strong> file formats. The maximum file size is <strong>10MB</strong>.
                 </div>
-            </div>
+            </details>
+        </div>
 
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="heading4">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">
-                        Can I merge Title and URL into clickable links?
-                    </button>
-                </h2>
-                <div id="faq4" class="accordion-collapse collapse" aria-labelledby="heading4" data-bs-parent="#faqAccordion">
-                    <div class="accordion-body">
-                        <strong>Yes!</strong> Use the <a href="/merge">Link Merger</a> feature. Upload a file with 'Title' and 'URL' columns, and the tool will create a file where the Title cells contain clickable hyperlinks to the URLs.
-                    </div>
+        <div class="faq-item">
+            <details>
+                <summary>Can I merge Title and URL into clickable links?</summary>
+                <div class="faq-content">
+                    <strong>Yes!</strong> Use the <a href="/merge">Link Merger</a> feature. Upload a file with 'Title' and 'URL' columns, and the tool will create a file where the Title cells contain clickable hyperlinks to the URLs.
                 </div>
-            </div>
+            </details>
+        </div>
 
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="heading5">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5" aria-expanded="false" aria-controls="faq5">
-                        Is this tool free?
-                    </button>
-                </h2>
-                <div id="faq5" class="accordion-collapse collapse" aria-labelledby="heading5" data-bs-parent="#faqAccordion">
-                    <div class="accordion-body">
-                        <strong>Yes, SheetLink is completely free to use.</strong> No registration, no subscription, no hidden fees.
-                    </div>
+        <div class="faq-item">
+            <details>
+                <summary>Is this tool free?</summary>
+                <div class="faq-content">
+                    <strong>Yes, SheetLink is completely free to use.</strong> No registration, no subscription, no hidden fees.
                 </div>
-            </div>
+            </details>
+        </div>
 
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="heading6">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6" aria-expanded="false" aria-controls="faq6">
-                        Does SheetLink support Excel files?
-                    </button>
-                </h2>
-                <div id="faq6" class="accordion-collapse collapse" aria-labelledby="heading6" data-bs-parent="#faqAccordion">
-                    <div class="accordion-body">
-                        <strong>Yes!</strong> SheetLink fully supports Microsoft Excel files including:
-                        <ul class="mt-2 mb-0">
-                            <li><strong>.xlsx</strong> - Excel 2007 and later</li>
-                            <li><strong>.xls</strong> - Excel 97-2003</li>
-                        </ul>
-                        <p class="mt-2 mb-0">You can extract hyperlinks from Excel spreadsheets and merge Title + URL columns into clickable hyperlinks within Excel files.</p>
-                    </div>
+        <div class="faq-item">
+            <details>
+                <summary>Does SheetLink support Excel files?</summary>
+                <div class="faq-content">
+                    <strong>Yes!</strong> SheetLink fully supports Microsoft Excel files including:
+                    <ul class="mt-2 mb-0">
+                        <li><strong>.xlsx</strong> - Excel 2007 and later</li>
+                        <li><strong>.xls</strong> - Excel 97-2003</li>
+                    </ul>
+                    <p class="mt-2 mb-0">You can extract hyperlinks from Excel spreadsheets and merge Title + URL columns into clickable hyperlinks within Excel files.</p>
                 </div>
-            </div>
+            </details>
+        </div>
 
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="heading7">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq7" aria-expanded="false" aria-controls="faq7">
-                        Is SheetLink affiliated with Microsoft?
-                    </button>
-                </h2>
-                <div id="faq7" class="accordion-collapse collapse" aria-labelledby="heading7" data-bs-parent="#faqAccordion">
-                    <div class="accordion-body">
-                        <strong>No.</strong> SheetLink is an independent, open-source project and is <strong>not affiliated with, endorsed by, or sponsored by Microsoft Corporation</strong>.
-                        <p class="mt-2 mb-0">"Excel" and "Microsoft Excel" are trademarks of Microsoft Corporation. This tool provides functionality to work with Excel file formats (.xlsx, .xls) but is developed and maintained independently. All Excel-related file processing is performed using open-source libraries (ClosedXML).</p>
-                    </div>
+        <div class="faq-item">
+            <details>
+                <summary>Is SheetLink affiliated with Microsoft?</summary>
+                <div class="faq-content">
+                    <strong>No.</strong> SheetLink is an independent, open-source project and is <strong>not affiliated with, endorsed by, or sponsored by Microsoft Corporation</strong>.
+                    <p class="mt-2 mb-0">"Excel" and "Microsoft Excel" are trademarks of Microsoft Corporation. This tool provides functionality to work with Excel file formats (.xlsx, .xls) but is developed and maintained independently. All Excel-related file processing is performed using open-source libraries (ClosedXML).</p>
                 </div>
-            </div>
+            </details>
         </div>
     </div>
 </div>
