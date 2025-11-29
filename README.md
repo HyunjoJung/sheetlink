@@ -1,8 +1,16 @@
+<div align="center">
+
+<img src="ExcelLinkExtractorWeb/wwwroot/android-chrome-512x512.png" alt="SheetLink Logo" width="120">
+
 # SheetLink
 
 Free online tool to extract hyperlinks from spreadsheet files and merge Title + URL into clickable links.
 
 🔗 **Live Site**: [sheetlink.hyunjo.uk](https://sheetlink.hyunjo.uk)
+
+![Lighthouse Score](docs/lighthouse-score.jpg)
+
+</div>
 
 ## Features
 
@@ -15,7 +23,7 @@ Free online tool to extract hyperlinks from spreadsheet files and merge Title + 
 ## Tech Stack
 
 - **Backend**: ASP.NET Core 10.0 (Blazor Server)
-- **Excel Processing**: ClosedXML
+- **Excel Processing**: DocumentFormat.OpenXml (Microsoft official)
 - **Deployment**: Cloudflare Tunnel
 - **Hosting**: Self-hosted on Ubuntu 24.04
 
@@ -41,20 +49,6 @@ dotnet build
 dotnet publish ExcelLinkExtractorWeb -c Release -o ./publish
 ```
 
-### Deploying
-
-Use the deployment script:
-
-```bash
-./scripts/deploy.sh
-```
-
-This will:
-1. Clean previous builds
-2. Build the project in Release mode
-3. Transfer files to server using rsync
-4. Restart the systemd service
-
 ## Project Structure
 
 ```
@@ -63,8 +57,6 @@ ExcelLinkExtractor/
 │   ├── Components/
 │   │   ├── Pages/                  # Blazor pages (Home, Merge, FAQ)
 │   │   └── Layout/                 # Layout components
-│   ├── Controllers/                # API endpoints
-│   │   └── FileController.cs       # File upload/download
 │   ├── Services/                   # Business logic
 │   │   └── LinkExtractorService.cs # Excel processing
 │   └── wwwroot/                    # Static files
@@ -96,7 +88,7 @@ Suggestions and bug reports are welcome via GitHub issues.
 
 **SheetLink is an independent, open-source project and is not affiliated with, endorsed by, or sponsored by Microsoft Corporation.**
 
-"Excel" and "Microsoft Excel" are trademarks of Microsoft Corporation. This tool provides functionality to work with Excel file formats (.xlsx, .xls) but is developed and maintained independently. All Excel-related file processing is performed using open-source libraries (ClosedXML).
+"Excel" and "Microsoft Excel" are trademarks of Microsoft Corporation. This tool provides functionality to work with Excel file formats (.xlsx, .xls) but is developed and maintained independently. All Excel-related file processing is performed using open-source libraries (DocumentFormat.OpenXml).
 
 ## License
 

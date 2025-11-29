@@ -42,7 +42,7 @@
         <!-- Result -->
         <div class="card shadow-sm mb-4">
             <div class="card-header bg-success text-white">
-                <h5 class="mb-0">Extraction Complete!</h5>
+                <h2 class="mb-0 h5">Extraction Complete!</h2>
             </div>
             <div class="card-body">
                 <div class="row text-center mb-4">
@@ -110,7 +110,7 @@
             <div class="col-md-6">
                 <div class="card shadow-sm h-100">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Step 1. Download Template</h5>
+                        <h2 class="mb-0 h5">Step 1. Download Template</h2>
                     </div>
                     <div class="card-body text-center p-4">
                         <p class="text-muted mb-4">Sample file with 'Title' column containing hyperlinks</p>
@@ -125,13 +125,14 @@
             <div class="col-md-6">
                 <div class="card shadow-sm h-100">
                     <div class="card-header bg-success text-white">
-                        <h5 class="mb-0">Step 2. Upload File</h5>
+                        <h2 class="mb-0 h5">Step 2. Upload File</h2>
                     </div>
                     <div class="card-body text-center p-4">
                         <p class="text-muted mb-4">Upload your spreadsheet file with hyperlinks</p>
                         @if (isInteractive)
                         {
-                            <InputFile OnChange="HandleFileSelected" accept=".xlsx,.xls" class="form-control" style="max-width: 300px; margin: 0 auto;" />
+                            <label for="fileInput" class="visually-hidden">Select spreadsheet file</label>
+                            <InputFile id="fileInput" OnChange="HandleFileSelected" accept=".xlsx,.xls" class="form-control" style="max-width: 300px; margin: 0 auto;" />
                             <button class="btn btn-success btn-lg mt-3" @onclick="UploadFile" disabled="@(selectedFile == null)">
                                 Upload & Extract
                             </button>
@@ -149,7 +150,7 @@
         <!-- How to use -->
         <div class="card shadow-sm mt-4">
             <div class="card-body">
-                <h5 class="card-title">How to Use</h5>
+                <h2 class="card-title h5">How to Use</h2>
                 <ol class="mb-0">
                     <li>Download the sample or prepare your spreadsheet file</li>
                     <li>Add hyperlinks to the 'Title' column</li>
