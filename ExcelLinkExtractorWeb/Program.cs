@@ -1,5 +1,7 @@
 using ExcelLinkExtractorWeb.Components;
 using ExcelLinkExtractorWeb.Services;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,24 @@ builder.Services.AddRazorComponents()
 
 // Register LinkExtractor service
 builder.Services.AddScoped<LinkExtractorService>();
+
+// Add rate limiting
+builder.Services.AddRateLimiter(options =>
+{
+    // Global rate limit: 100 requests per minute per IP
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            factory: partition => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 100,
+                Window = TimeSpan.FromMinutes(1),
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 0
+            }));
+
+    options.RejectionStatusCode = 429; // Too Many Requests
+});
 
 var app = builder.Build();
 
@@ -21,6 +41,34 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
 app.UseHttpsRedirection();
+
+// Add security headers
+app.Use(async (context, next) =>
+{
+    // Content Security Policy
+    context.Response.Headers.Append("Content-Security-Policy",
+        "default-src 'self'; " +
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " + // Blazor requires unsafe-eval
+        "style-src 'self' 'unsafe-inline'; " + // Inline styles for Blazor
+        "img-src 'self' data:; " +
+        "font-src 'self'; " +
+        "connect-src 'self' wss: ws:; " + // WebSocket for Blazor SignalR
+        "frame-ancestors 'none'; " +
+        "base-uri 'self'; " +
+        "form-action 'self'");
+
+    // Additional security headers
+    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+    context.Response.Headers.Append("X-Frame-Options", "DENY");
+    context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
+    context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
+    context.Response.Headers.Append("Permissions-Policy", "geolocation=(), microphone=(), camera=()");
+
+    await next();
+});
+
+// Enable rate limiting
+app.UseRateLimiter();
 
 app.UseAntiforgery();
 

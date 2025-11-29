@@ -22,6 +22,9 @@ public class LinkExtractorService
     private static readonly byte[] XlsxSignature = { 0x50, 0x4B, 0x03, 0x04 }; // PK.. (ZIP format)
     private static readonly byte[] XlsSignature = { 0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1 }; // OLE2 format
 
+    // Cached stylesheet for performance (created once, reused across all operations)
+    private static readonly Lazy<Stylesheet> CachedStylesheet = new Lazy<Stylesheet>(() => CreateStylesheet());
+
     public LinkExtractorService(ILogger<LinkExtractorService> logger)
     {
         _logger = logger;
@@ -196,7 +199,7 @@ public class LinkExtractorService
 
                 // Create stylesheet
                 var stylesPart = newWorkbookPart.AddNewPart<WorkbookStylesPart>();
-                stylesPart.Stylesheet = CreateStylesheet();
+                stylesPart.Stylesheet = GetStylesheet();
 
                 // Copy header row with bold style
                 var headerRow = new Row { RowIndex = 1 };
@@ -351,7 +354,7 @@ public class LinkExtractorService
 
             // Create stylesheet
             var stylesPart = workbookPart.AddNewPart<WorkbookStylesPart>();
-            stylesPart.Stylesheet = CreateStylesheet();
+            stylesPart.Stylesheet = GetStylesheet();
 
             // Header row with blue background
             var headerRow = new Row { RowIndex = 1 };
@@ -449,7 +452,7 @@ public class LinkExtractorService
 
             // Create stylesheet
             var stylesPart = workbookPart.AddNewPart<WorkbookStylesPart>();
-            stylesPart.Stylesheet = CreateStylesheet();
+            stylesPart.Stylesheet = GetStylesheet();
 
             // Header row with green background
             var headerRow = new Row { RowIndex = 1 };
@@ -625,7 +628,7 @@ public class LinkExtractorService
 
                 // Create stylesheet
                 var stylesPart = newWorkbookPart.AddNewPart<WorkbookStylesPart>();
-                stylesPart.Stylesheet = CreateStylesheet();
+                stylesPart.Stylesheet = GetStylesheet();
 
                 // Header row
                 var headerRow = new Row { RowIndex = 1 };
@@ -751,6 +754,20 @@ public class LinkExtractorService
         return result;
     }
 
+    /// <summary>
+    /// Gets a cloned copy of the cached stylesheet for use in a workbook.
+    /// </summary>
+    /// <returns>A new Stylesheet instance with the same formatting</returns>
+    private static Stylesheet GetStylesheet()
+    {
+        // Clone the cached stylesheet to avoid sharing instances between workbooks
+        return (Stylesheet)CachedStylesheet.Value.CloneNode(true);
+    }
+
+    /// <summary>
+    /// Creates the standard stylesheet with fonts, fills, and cell formats.
+    /// </summary>
+    /// <returns>Configured Stylesheet instance</returns>
     private static Stylesheet CreateStylesheet()
     {
         var stylesheet = new Stylesheet();
