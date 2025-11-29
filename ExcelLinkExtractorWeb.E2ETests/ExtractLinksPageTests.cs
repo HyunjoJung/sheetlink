@@ -1,18 +1,17 @@
 using System.Text.RegularExpressions;
 using Microsoft.Playwright;
-using Microsoft.Playwright.NUnit;
+using NUnit.Framework;
 
 namespace ExcelLinkExtractorWeb.E2ETests;
 
 [TestFixture]
-public class ExtractLinksPageTests : PageTest
+public class ExtractLinksPageTests : SheetLinkPageTest
 {
-    private const string BaseUrl = "http://localhost:5050";
-
     [Test]
     public async Task HomePage_ShouldLoadSuccessfully()
     {
         await Page.GotoAsync(BaseUrl);
+        await WaitForHomeInteractiveAsync();
 
         // Check page title
         await Expect(Page).ToHaveTitleAsync(new Regex("SheetLink"));
@@ -26,9 +25,7 @@ public class ExtractLinksPageTests : PageTest
     public async Task HomePage_ShouldShowNavigation()
     {
         await Page.GotoAsync(BaseUrl);
-
-        // Wait for navigation to be ready
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await WaitForHomeInteractiveAsync();
 
         // Check navigation links
         var extractLink = Page.Locator(".navbar-nav").GetByRole(AriaRole.Link, new() { Name = "Extract Links" });
@@ -42,11 +39,7 @@ public class ExtractLinksPageTests : PageTest
     public async Task DownloadTemplateButton_ShouldBeVisible()
     {
         await Page.GotoAsync(BaseUrl);
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-
-        // Wait for skeleton to disappear (Blazor becomes interactive)
-        var skeleton = Page.Locator(".skeleton.skeleton-button").First;
-        await skeleton.WaitForAsync(new() { State = WaitForSelectorState.Hidden, Timeout = 30000 });
+        await WaitForHomeInteractiveAsync();
 
         // Now the actual button should be visible
         var downloadButton = Page.Locator("button:has-text('Download Sample')");
@@ -57,6 +50,7 @@ public class ExtractLinksPageTests : PageTest
     public async Task SkipToContentLink_ShouldBeFocusable()
     {
         await Page.GotoAsync(BaseUrl);
+        await WaitForHomeInteractiveAsync();
 
         // Tab to skip link
         await Page.Keyboard.PressAsync("Tab");
@@ -70,9 +64,7 @@ public class ExtractLinksPageTests : PageTest
     public async Task FileUpload_WithoutFile_ShouldNotSubmit()
     {
         await Page.GotoAsync(BaseUrl);
-
-        // Wait for interactive mode
-        await Page.WaitForTimeoutAsync(3000);
+        await WaitForHomeInteractiveAsync();
 
         // Button should be disabled without a file
         var uploadButton = Page.Locator("button:has-text('Upload & Extract')");
@@ -83,9 +75,7 @@ public class ExtractLinksPageTests : PageTest
     public async Task FAQ_Link_ShouldBeVisible()
     {
         await Page.GotoAsync(BaseUrl);
-
-        // Wait for page to load
-        await Page.WaitForTimeoutAsync(2000);
+        await WaitForHomeInteractiveAsync();
 
         // Check if FAQ link is visible
         var faqLink = Page.Locator("a[href='/faq']");
@@ -96,11 +86,7 @@ public class ExtractLinksPageTests : PageTest
     public async Task ErrorMessage_ShouldShowForInvalidFile()
     {
         await Page.GotoAsync(BaseUrl);
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-
-        // Wait for skeleton to disappear (Blazor becomes interactive)
-        var skeleton = Page.Locator(".skeleton.skeleton-button").First;
-        await skeleton.WaitForAsync(new() { State = WaitForSelectorState.Hidden, Timeout = 30000 });
+        await WaitForHomeInteractiveAsync();
 
         // Now the upload button should be visible
         var uploadButton = Page.Locator("button:has-text('Upload & Extract')");

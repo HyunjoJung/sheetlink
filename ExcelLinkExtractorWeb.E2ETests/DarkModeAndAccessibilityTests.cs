@@ -1,17 +1,16 @@
 using Microsoft.Playwright;
-using Microsoft.Playwright.NUnit;
+using NUnit.Framework;
 
 namespace ExcelLinkExtractorWeb.E2ETests;
 
 [TestFixture]
-public class DarkModeAndAccessibilityTests : PageTest
+public class DarkModeAndAccessibilityTests : SheetLinkPageTest
 {
-    private const string BaseUrl = "http://localhost:5050";
-
     [Test]
     public async Task DarkModeToggle_ShouldBeVisible()
     {
         await Page.GotoAsync(BaseUrl);
+        await WaitForHomeInteractiveAsync();
 
         // Check theme toggle button
         var themeToggle = Page.Locator(".theme-toggle");
@@ -22,6 +21,7 @@ public class DarkModeAndAccessibilityTests : PageTest
     public async Task DarkModeToggle_ShouldChangeTheme()
     {
         await Page.GotoAsync(BaseUrl);
+        await WaitForHomeInteractiveAsync();
 
         // Wait for page to load
         await Page.WaitForTimeoutAsync(1000);
@@ -47,6 +47,7 @@ public class DarkModeAndAccessibilityTests : PageTest
     public async Task DarkModeToggle_ShouldPersistTheme()
     {
         await Page.GotoAsync(BaseUrl);
+        await WaitForHomeInteractiveAsync();
 
         // Wait for page to load
         await Page.WaitForTimeoutAsync(1000);
@@ -72,6 +73,7 @@ public class DarkModeAndAccessibilityTests : PageTest
     public async Task DarkModeToggle_ShouldHaveAccessibleLabel()
     {
         await Page.GotoAsync(BaseUrl);
+        await WaitForHomeInteractiveAsync();
 
         // Check aria-label on theme toggle
         var themeToggle = Page.Locator(".theme-toggle");
@@ -85,7 +87,7 @@ public class DarkModeAndAccessibilityTests : PageTest
     public async Task SkipToContentLink_ShouldWork()
     {
         await Page.GotoAsync(BaseUrl);
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await WaitForHomeInteractiveAsync();
 
         // Wait a bit for page to fully render
         await Page.WaitForTimeoutAsync(1000);
@@ -112,9 +114,7 @@ public class DarkModeAndAccessibilityTests : PageTest
     public async Task FormInputs_ShouldHaveLabels()
     {
         await Page.GotoAsync(BaseUrl);
-
-        // Wait for interactive mode
-        await Page.WaitForTimeoutAsync(3000);
+        await WaitForHomeInteractiveAsync();
 
         // Check file input has associated label
         var fileInput = Page.Locator("input#fileInput");
@@ -133,7 +133,7 @@ public class DarkModeAndAccessibilityTests : PageTest
     public async Task KeyboardNavigation_ShouldWork()
     {
         await Page.GotoAsync(BaseUrl);
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await WaitForHomeInteractiveAsync();
 
         // Verify theme toggle is focusable by checking it can receive focus
         var themeToggle = Page.Locator(".theme-toggle");
@@ -152,6 +152,7 @@ public class DarkModeAndAccessibilityTests : PageTest
     public async Task ExternalLinks_ShouldHaveSecurityAttributes()
     {
         await Page.GotoAsync(BaseUrl);
+        await WaitForHomeInteractiveAsync();
 
         // Check all external links
         var externalLinks = Page.Locator("a[target='_blank']");
@@ -175,6 +176,7 @@ public class DarkModeAndAccessibilityTests : PageTest
     public async Task HeadingHierarchy_ShouldBeCorrect()
     {
         await Page.GotoAsync(BaseUrl);
+        await WaitForHomeInteractiveAsync();
 
         // Check for h1
         var h1 = Page.Locator("h1").First;
@@ -189,6 +191,7 @@ public class DarkModeAndAccessibilityTests : PageTest
     public async Task ImagesAndIcons_ShouldHaveAltText()
     {
         await Page.GotoAsync(BaseUrl);
+        await WaitForHomeInteractiveAsync();
 
         // Check all img elements have alt attribute
         var images = Page.Locator("img");
@@ -207,6 +210,7 @@ public class DarkModeAndAccessibilityTests : PageTest
     public async Task LoadingSkeletons_OrContent_ShouldEventuallyAppear()
     {
         await Page.GotoAsync(BaseUrl);
+        await WaitForHomeInteractiveAsync();
 
         // Eventually, either skeleton or actual content should be visible
         // We'll wait for the download button which replaces the skeleton

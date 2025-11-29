@@ -1,18 +1,17 @@
 using System.Text.RegularExpressions;
 using Microsoft.Playwright;
-using Microsoft.Playwright.NUnit;
+using NUnit.Framework;
 
 namespace ExcelLinkExtractorWeb.E2ETests;
 
 [TestFixture]
-public class MergeLinksPageTests : PageTest
+public class MergeLinksPageTests : SheetLinkPageTest
 {
-    private const string BaseUrl = "http://localhost:5050";
-
     [Test]
     public async Task MergePage_ShouldLoadSuccessfully()
     {
         await Page.GotoAsync($"{BaseUrl}/merge");
+        await WaitForMergeInteractiveAsync();
 
         // Check page title
         await Expect(Page).ToHaveTitleAsync(new Regex("SheetLink"));
@@ -26,6 +25,7 @@ public class MergeLinksPageTests : PageTest
     public async Task MergePage_ShouldShowDescription()
     {
         await Page.GotoAsync($"{BaseUrl}/merge");
+        await WaitForMergeInteractiveAsync();
 
         // Check description text - match actual content
         var description = Page.Locator("text=Combine Title and URL into clickable hyperlinks");
@@ -36,9 +36,7 @@ public class MergeLinksPageTests : PageTest
     public async Task DownloadMergeTemplateButton_ShouldBeVisible()
     {
         await Page.GotoAsync($"{BaseUrl}/merge");
-
-        // Wait for interactive mode
-        await Page.WaitForTimeoutAsync(3000);
+        await WaitForMergeInteractiveAsync();
 
         // Check download template button
         var downloadButton = Page.Locator("button:has-text('Download Sample')");
@@ -50,7 +48,7 @@ public class MergeLinksPageTests : PageTest
     {
         // Start on home page
         await Page.GotoAsync(BaseUrl);
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await WaitForHomeInteractiveAsync();
 
         // Wait for h1 to be visible (this is always visible, not affected by isInteractive)
         var homeHeading = Page.Locator("h1").Filter(new() { HasText = "SheetLink" });
@@ -59,7 +57,7 @@ public class MergeLinksPageTests : PageTest
         // Navigate to Merge page
         var mergeLink = Page.Locator(".navbar-nav").GetByRole(AriaRole.Link, new() { Name = "Merge Links" });
         await mergeLink.ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await WaitForMergeInteractiveAsync();
 
         // Wait for merge page heading
         var mergeHeading = Page.Locator("h1").Filter(new() { HasText = "Link Merger" });
@@ -68,7 +66,7 @@ public class MergeLinksPageTests : PageTest
         // Navigate back to Extract page
         var extractLink = Page.Locator(".navbar-nav").GetByRole(AriaRole.Link, new() { Name = "Extract Links" });
         await extractLink.ClickAsync();
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await WaitForHomeInteractiveAsync();
 
         // Check we're back on home page
         await Expect(homeHeading).ToBeVisibleAsync(new() { Timeout = 10000 });
@@ -78,13 +76,10 @@ public class MergeLinksPageTests : PageTest
     public async Task MergePage_ShouldShowFileInput()
     {
         await Page.GotoAsync($"{BaseUrl}/merge");
-
-        // Wait for interactive mode
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await WaitForMergeInteractiveAsync();
 
         // Check file input exists - wait for it to appear
-        var fileInput = Page.Locator("input[type='file']");
-        await fileInput.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 20000 });
+        var fileInput = Page.Locator("#mergeFileInput");
         await Expect(fileInput).ToBeVisibleAsync();
     }
 
@@ -92,11 +87,7 @@ public class MergeLinksPageTests : PageTest
     public async Task MergePage_ShouldShowMergeButton()
     {
         await Page.GotoAsync($"{BaseUrl}/merge");
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-
-        // Wait for skeleton to disappear (Blazor becomes interactive)
-        var skeleton = Page.Locator(".skeleton.skeleton-button").First;
-        await skeleton.WaitForAsync(new() { State = WaitForSelectorState.Hidden, Timeout = 30000 });
+        await WaitForMergeInteractiveAsync();
 
         // Now the merge button should be visible
         var mergeButton = Page.Locator("button:has-text('Upload & Merge')");
@@ -107,9 +98,7 @@ public class MergeLinksPageTests : PageTest
     public async Task MergePage_ErrorMessage_ShouldShowForInvalidFile()
     {
         await Page.GotoAsync($"{BaseUrl}/merge");
-
-        // Wait for interactive mode
-        await Page.WaitForTimeoutAsync(3000);
+        await WaitForMergeInteractiveAsync();
 
         // Create a temporary text file (not Excel)
         var tempFile = Path.GetTempFileName();
