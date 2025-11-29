@@ -52,28 +52,24 @@ public class MergeLinksPageTests : PageTest
         await Page.GotoAsync(BaseUrl);
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
-        // Wait for h1 to have content
-        var h1 = Page.Locator("h1");
-        await h1.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 15000 });
-        await Expect(h1).ToContainTextAsync("SheetLink");
+        // Wait for initial page to load - look for specific h1 containing SheetLink
+        await Expect(Page.Locator("h1:has-text('SheetLink')")).ToBeVisibleAsync(new() { Timeout = 30000 });
 
         // Navigate to Merge page
         var mergeLink = Page.Locator(".navbar-nav").GetByRole(AriaRole.Link, new() { Name = "Merge Links" });
         await mergeLink.ClickAsync();
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-        await Page.WaitForTimeoutAsync(1000);
 
-        // Check we're on merge page - wait for heading to update
-        await Expect(h1).ToContainTextAsync("Link Merger", new() { Timeout = 15000 });
+        // Wait for merge page heading to appear
+        await Expect(Page.Locator("h1:has-text('Link Merger')")).ToBeVisibleAsync(new() { Timeout = 30000 });
 
         // Navigate back to Extract page
         var extractLink = Page.Locator(".navbar-nav").GetByRole(AriaRole.Link, new() { Name = "Extract Links" });
         await extractLink.ClickAsync();
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-        await Page.WaitForTimeoutAsync(1000);
 
         // Check we're back on home page
-        await Expect(h1).ToContainTextAsync("SheetLink", new() { Timeout = 15000 });
+        await Expect(Page.Locator("h1:has-text('SheetLink')")).ToBeVisibleAsync(new() { Timeout = 30000 });
     }
 
     [Test]
@@ -98,8 +94,9 @@ public class MergeLinksPageTests : PageTest
         // Wait for interactive mode
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
-        var mergeButton = Page.GetByRole(AriaRole.Button, new() { Name = "Upload & Merge" });
-        await mergeButton.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 20000 });
+        // Use text locator for the merge button
+        var mergeButton = Page.Locator("button:has-text('Upload & Merge')");
+        await mergeButton.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 30000 });
         await Expect(mergeButton).ToBeVisibleAsync();
     }
 

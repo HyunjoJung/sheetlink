@@ -20,8 +20,7 @@ public class LinkExtractorService : ILinkExtractorService
     private static readonly byte[] XlsxSignature = { 0x50, 0x4B, 0x03, 0x04 }; // PK.. (ZIP format)
     private static readonly byte[] XlsSignature = { 0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1 }; // OLE2 format
 
-    // Cached stylesheet for performance (created once, reused across all operations)
-    private static readonly Lazy<Stylesheet> CachedStylesheet = new Lazy<Stylesheet>(() => CreateStylesheet());
+    // Cached stylesheet is no longer used to ensure thread-safety. A new one is created on each call.
 
     public LinkExtractorService(
         ILogger<LinkExtractorService> logger,
@@ -778,13 +777,13 @@ public class LinkExtractorService : ILinkExtractorService
     }
 
     /// <summary>
-    /// Gets a cloned copy of the cached stylesheet for use in a workbook.
+    /// Creates a new stylesheet for each call to ensure thread-safety in parallel operations.
     /// </summary>
     /// <returns>A new Stylesheet instance with the same formatting</returns>
     private static Stylesheet GetStylesheet()
     {
-        // Clone the cached stylesheet to avoid sharing instances between workbooks
-        return (Stylesheet)CachedStylesheet.Value.CloneNode(true);
+        // Create a new stylesheet for each call to ensure thread safety.
+        return CreateStylesheet();
     }
 
     /// <summary>

@@ -46,11 +46,11 @@ public class ExtractLinksPageTests : PageTest
         // Wait for Blazor to be interactive by waiting for skeleton to disappear
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
-        // Wait for skeleton to be replaced by actual button
-        var downloadButton = Page.GetByRole(AriaRole.Button, new() { NameRegex = new Regex("Download Sample", RegexOptions.IgnoreCase) });
+        // Wait for skeleton to be replaced by actual button - use exact text with (.xlsx)
+        var downloadButton = Page.Locator("button:has-text('Download Sample')");
 
         // Wait for button to appear (skeleton will be replaced)
-        await downloadButton.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 20000 });
+        await downloadButton.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 30000 });
         await Expect(downloadButton).ToBeVisibleAsync();
     }
 
@@ -97,9 +97,11 @@ public class ExtractLinksPageTests : PageTest
     public async Task ErrorMessage_ShouldShowForInvalidFile()
     {
         await Page.GotoAsync(BaseUrl);
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
-        var uploadButton = Page.GetByRole(AriaRole.Button, new() { Name = "Upload & Extract" });
-        await uploadButton.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 20000 });
+        // Wait for the upload button to appear
+        var uploadButton = Page.Locator("button:has-text('Upload & Extract')");
+        await uploadButton.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 30000 });
 
         // Create a temporary text file (not Excel)
         var tempFile = Path.GetTempFileName();

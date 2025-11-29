@@ -27,6 +27,9 @@ packages/
 # Deployment scripts (contains credentials)
 scripts/
 
+# Test logs
+*.log
+
 # OS
 Thumbs.db
 .DS_Store
