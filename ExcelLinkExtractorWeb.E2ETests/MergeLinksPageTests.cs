@@ -98,7 +98,8 @@ public class MergeLinksPageTests : PageTest
         // Wait for interactive mode
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
-                var mergeButton = Page.GetByRole(AriaRole.Button, new() { Name = "Upload & Merge" });        await mergeButton.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 20000 });
+        var mergeButton = Page.GetByRole(AriaRole.Button, new() { Name = "Upload & Merge" });
+        await mergeButton.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 20000 });
         await Expect(mergeButton).ToBeVisibleAsync();
     }
 
