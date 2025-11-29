@@ -86,12 +86,15 @@ public class DarkModeAndAccessibilityTests : PageTest
     {
         await Page.GotoAsync(BaseUrl);
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        
+        // Tab to the skip link to make it visible and active
+        await Page.Keyboard.PressAsync("Tab");
 
         // Check if skip link exists and has correct href
         var skipLink = Page.Locator(".skip-to-content");
 
-        // Verify the skip link exists in DOM
-        await Expect(skipLink).ToBeAttachedAsync();
+        // Verify the skip link is now visible
+        await Expect(skipLink).ToBeVisibleAsync();
 
         // Verify it has the right href
         var href = await skipLink.GetAttributeAsync("href");

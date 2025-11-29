@@ -31,8 +31,8 @@ public class ExtractLinksPageTests : PageTest
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         // Check navigation links
-        var extractLink = Page.Locator("text=Extract Links");
-        var mergeLink = Page.Locator("text=Merge Links");
+        var extractLink = Page.Locator(".navbar-nav").GetByRole(AriaRole.Link, new() { Name = "Extract Links" });
+        var mergeLink = Page.Locator(".navbar-nav").GetByRole(AriaRole.Link, new() { Name = "Merge Links" });
 
         await Expect(extractLink).ToBeVisibleAsync(new() { Timeout = 10000 });
         await Expect(mergeLink).ToBeVisibleAsync(new() { Timeout = 10000 });
@@ -47,7 +47,7 @@ public class ExtractLinksPageTests : PageTest
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         // Wait for skeleton to be replaced by actual button
-        var downloadButton = Page.Locator("button:has-text('Download Sample')");
+        var downloadButton = Page.GetByRole(AriaRole.Button, new() { NameRegex = new Regex("Download Sample", RegexOptions.IgnoreCase) });
 
         // Wait for button to appear (skeleton will be replaced)
         await downloadButton.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 20000 });
@@ -98,9 +98,7 @@ public class ExtractLinksPageTests : PageTest
     {
         await Page.GotoAsync(BaseUrl);
 
-        // Wait for interactive mode - wait for actual button to appear
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-        var uploadButton = Page.Locator("button:has-text('Upload & Extract')");
+        var uploadButton = Page.GetByRole(AriaRole.Button, new() { Name = "Upload & Extract" });
         await uploadButton.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 20000 });
 
         // Create a temporary text file (not Excel)

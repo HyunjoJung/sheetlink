@@ -58,7 +58,7 @@ public class MergeLinksPageTests : PageTest
         await Expect(h1).ToContainTextAsync("SheetLink");
 
         // Navigate to Merge page
-        var mergeLink = Page.Locator("text=Merge Links");
+        var mergeLink = Page.Locator(".navbar-nav").GetByRole(AriaRole.Link, new() { Name = "Merge Links" });
         await mergeLink.ClickAsync();
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.WaitForTimeoutAsync(1000);
@@ -67,7 +67,7 @@ public class MergeLinksPageTests : PageTest
         await Expect(h1).ToContainTextAsync("Link Merger", new() { Timeout = 15000 });
 
         // Navigate back to Extract page
-        var extractLink = Page.Locator("text=Extract Links");
+        var extractLink = Page.Locator(".navbar-nav").GetByRole(AriaRole.Link, new() { Name = "Extract Links" });
         await extractLink.ClickAsync();
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
         await Page.WaitForTimeoutAsync(1000);
@@ -98,9 +98,7 @@ public class MergeLinksPageTests : PageTest
         // Wait for interactive mode
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
-        // Check merge button - use actual button text
-        var mergeButton = Page.Locator("button:has-text('Upload & Merge')");
-        await mergeButton.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 20000 });
+                var mergeButton = Page.GetByRole(AriaRole.Button, new() { Name = "Upload & Merge" });        await mergeButton.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 20000 });
         await Expect(mergeButton).ToBeVisibleAsync();
     }
 
