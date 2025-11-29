@@ -52,16 +52,18 @@ public class MergeLinksPageTests : PageTest
         await Page.GotoAsync(BaseUrl);
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
-        // Wait for initial page to load - look for specific h1 containing SheetLink
-        await Expect(Page.Locator("h1:has-text('SheetLink')")).ToBeVisibleAsync(new() { Timeout = 30000 });
+        // Wait for h1 to be visible (this is always visible, not affected by isInteractive)
+        var homeHeading = Page.Locator("h1").Filter(new() { HasText = "SheetLink" });
+        await Expect(homeHeading).ToBeVisibleAsync(new() { Timeout = 10000 });
 
         // Navigate to Merge page
         var mergeLink = Page.Locator(".navbar-nav").GetByRole(AriaRole.Link, new() { Name = "Merge Links" });
         await mergeLink.ClickAsync();
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
-        // Wait for merge page heading to appear
-        await Expect(Page.Locator("h1:has-text('Link Merger')")).ToBeVisibleAsync(new() { Timeout = 30000 });
+        // Wait for merge page heading
+        var mergeHeading = Page.Locator("h1").Filter(new() { HasText = "Link Merger" });
+        await Expect(mergeHeading).ToBeVisibleAsync(new() { Timeout = 10000 });
 
         // Navigate back to Extract page
         var extractLink = Page.Locator(".navbar-nav").GetByRole(AriaRole.Link, new() { Name = "Extract Links" });
@@ -69,7 +71,7 @@ public class MergeLinksPageTests : PageTest
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
         // Check we're back on home page
-        await Expect(Page.Locator("h1:has-text('SheetLink')")).ToBeVisibleAsync(new() { Timeout = 30000 });
+        await Expect(homeHeading).ToBeVisibleAsync(new() { Timeout = 10000 });
     }
 
     [Test]
@@ -90,13 +92,14 @@ public class MergeLinksPageTests : PageTest
     public async Task MergePage_ShouldShowMergeButton()
     {
         await Page.GotoAsync($"{BaseUrl}/merge");
-
-        // Wait for interactive mode
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
-        // Use text locator for the merge button
+        // Wait for skeleton to disappear (Blazor becomes interactive)
+        var skeleton = Page.Locator(".skeleton.skeleton-button").First;
+        await skeleton.WaitForAsync(new() { State = WaitForSelectorState.Hidden, Timeout = 30000 });
+
+        // Now the merge button should be visible
         var mergeButton = Page.Locator("button:has-text('Upload & Merge')");
-        await mergeButton.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 30000 });
         await Expect(mergeButton).ToBeVisibleAsync();
     }
 

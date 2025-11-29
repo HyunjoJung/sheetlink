@@ -42,15 +42,14 @@ public class ExtractLinksPageTests : PageTest
     public async Task DownloadTemplateButton_ShouldBeVisible()
     {
         await Page.GotoAsync(BaseUrl);
-
-        // Wait for Blazor to be interactive by waiting for skeleton to disappear
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
-        // Wait for skeleton to be replaced by actual button - use exact text with (.xlsx)
-        var downloadButton = Page.Locator("button:has-text('Download Sample')");
+        // Wait for skeleton to disappear (Blazor becomes interactive)
+        var skeleton = Page.Locator(".skeleton.skeleton-button").First;
+        await skeleton.WaitForAsync(new() { State = WaitForSelectorState.Hidden, Timeout = 30000 });
 
-        // Wait for button to appear (skeleton will be replaced)
-        await downloadButton.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 30000 });
+        // Now the actual button should be visible
+        var downloadButton = Page.Locator("button:has-text('Download Sample')");
         await Expect(downloadButton).ToBeVisibleAsync();
     }
 
@@ -99,9 +98,12 @@ public class ExtractLinksPageTests : PageTest
         await Page.GotoAsync(BaseUrl);
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
-        // Wait for the upload button to appear
+        // Wait for skeleton to disappear (Blazor becomes interactive)
+        var skeleton = Page.Locator(".skeleton.skeleton-button").First;
+        await skeleton.WaitForAsync(new() { State = WaitForSelectorState.Hidden, Timeout = 30000 });
+
+        // Now the upload button should be visible
         var uploadButton = Page.Locator("button:has-text('Upload & Extract')");
-        await uploadButton.WaitForAsync(new() { State = WaitForSelectorState.Visible, Timeout = 30000 });
 
         // Create a temporary text file (not Excel)
         var tempFile = Path.GetTempFileName();
