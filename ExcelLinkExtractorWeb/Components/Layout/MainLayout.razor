@@ -31,9 +31,21 @@
     .navbar-nav-mobile {
         display: flex !important;
         flex-direction: row;
+        gap: 1.5rem;
+    }
+
+    .navbar-nav-mobile .nav-link {
+        padding: 0.5rem 0;
     }
 
     @@media (max-width: 991.98px) {
+        .navbar-nav-mobile {
+            gap: 0;
+        }
+
+        .navbar-nav-mobile .nav-link {
+            padding: 0.5rem 1rem;
+        }
         .navbar-toggler-icon-wrapper {
             display: block;
         }
