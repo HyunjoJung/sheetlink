@@ -21,8 +21,36 @@ public partial class LinkExtractorService
         return value;
     }
 
-    private static string? GetHyperlink(WorksheetPart worksheetPart, string cellReference)
+    private static IReadOnlyDictionary<string, string> BuildHyperlinkMap(WorksheetPart worksheetPart)
     {
+        var map = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+        var hyperlinks = worksheetPart.Worksheet.GetFirstChild<Hyperlinks>();
+        if (hyperlinks == null)
+            return map;
+
+        foreach (var hyperlink in hyperlinks.Elements<Hyperlink>())
+        {
+            if (hyperlink.Reference == null || hyperlink.Id == null)
+                continue;
+
+            var hyperlinkRelationship = worksheetPart.HyperlinkRelationships.FirstOrDefault(r => r.Id == hyperlink.Id);
+            if (hyperlinkRelationship?.Uri == null)
+                continue;
+
+            map[hyperlink.Reference!] = hyperlinkRelationship.Uri.ToString();
+        }
+
+        return map;
+    }
+
+    private static string? GetHyperlink(WorksheetPart worksheetPart, string cellReference, IReadOnlyDictionary<string, string>? hyperlinkMap = null)
+    {
+        if (hyperlinkMap != null && hyperlinkMap.TryGetValue(cellReference, out var cachedUrl))
+        {
+            return cachedUrl;
+        }
+
         var hyperlinks = worksheetPart.Worksheet.GetFirstChild<Hyperlinks>();
         if (hyperlinks == null)
             return null;

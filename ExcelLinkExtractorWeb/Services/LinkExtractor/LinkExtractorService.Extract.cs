@@ -55,6 +55,7 @@ public partial class LinkExtractorService : ILinkExtractorService
             var workbookPart = document.WorkbookPart!;
             var worksheetPart = workbookPart.WorksheetParts.First();
             var sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>()!;
+            var hyperlinkMap = BuildHyperlinkMap(worksheetPart);
 
             int? headerRowIndex = null;
             int? targetColumnIndex = null;
@@ -164,7 +165,7 @@ public partial class LinkExtractorService : ILinkExtractorService
                             CellValue = new CellValue(cellValue)
                         };
 
-                        var hyperlink = GetHyperlink(worksheetPart, cell.CellReference.Value);
+                        var hyperlink = GetHyperlink(worksheetPart, cell.CellReference.Value, hyperlinkMap);
                         if (hyperlink != null)
                         {
                             newCell.StyleIndex = 2;
