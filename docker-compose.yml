@@ -9,4 +9,9 @@ services:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: "http://+:5050"
       ExcelProcessing__RateLimitPerMinute: 500
+    volumes:
+      - dataprotection-keys:/root/.aspnet/DataProtection-Keys
     restart: unless-stopped
+
+volumes:
+  dataprotection-keys:

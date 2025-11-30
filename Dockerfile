@@ -13,12 +13,7 @@ RUN dotnet restore
 
 # Copy everything else and build
 COPY . .
-RUN dotnet publish ExcelLinkExtractorWeb/ExcelLinkExtractorWeb.csproj \
-    -c Release \
-    -o /app/publish \
-    --no-restore \
-    /p:PublishSingleFile=false \
-    /p:PublishTrimmed=false
+RUN dotnet publish ExcelLinkExtractorWeb/ExcelLinkExtractorWeb.csproj -c Release -o /app/publish
 
 # runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
