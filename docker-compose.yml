@@ -1,7 +1,8 @@
 version: "3.9"
 services:
   sheetlink:
-    build: .
+    image: hyunjojung/sheetlink:latest
+    # build: .  # 로컬 개발 시 주석 해제
     ports:
       - "5050:5050"
     environment:

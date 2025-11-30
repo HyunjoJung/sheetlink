@@ -63,11 +63,18 @@ Static assets are cacheable (1 week). Response caching is enabled for GET reques
 
 ### Docker
 
+**Quick Start (from Docker Hub):**
 ```bash
-# Build and run
-docker compose up --build
+docker run -d -p 5050:5050 hyunjojung/sheetlink:latest
+```
+
+**Using docker-compose:**
+```bash
+docker compose up -d
 # App listens on http://localhost:5050
 ```
+
+See [Docker Deployment Guide](docs/DOCKER_DEPLOYMENT.md) for production deployment.
 
 ## Development & Tests
 
@@ -80,6 +87,9 @@ dotnet test ExcelLinkExtractor.Tests/ExcelLinkExtractor.Tests.csproj
 
 # E2E tests (NUnit + Playwright; auto-starts local server on a free port)
 DOTNET_ROOT=/home/dev/.dotnet dotnet test ExcelLinkExtractorWeb.E2ETests/ExcelLinkExtractorWeb.E2ETests.csproj
+
+# Coverage (writes cobertura to TestResults/coverage)
+dotnet test ExcelLinkExtractor.Tests/ExcelLinkExtractor.Tests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=TestResults/coverage/
 ```
 
 ## Project Structure
