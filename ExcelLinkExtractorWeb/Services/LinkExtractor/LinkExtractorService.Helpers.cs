@@ -8,7 +8,7 @@ public partial class LinkExtractorService
     private static string GetCellValue(Cell cell, WorkbookPart workbookPart)
     {
         if (cell.CellValue == null)
-            return "";
+            return string.Empty;
 
         var value = cell.CellValue.Text;
 
@@ -89,5 +89,43 @@ public partial class LinkExtractorService
             return null;
 
         return uri.AbsoluteUri;
+    }
+
+    protected int? FindColumnIndex(SheetData sheetData, WorkbookPart workbookPart, string columnName)
+    {
+        foreach (var row in sheetData.Elements<Row>().Take(_options.MaxHeaderSearchRows))
+        {
+            foreach (var cell in row.Elements<Cell>())
+            {
+                if (cell.CellReference == null || string.IsNullOrEmpty(cell.CellReference.Value))
+                    continue;
+
+                var cellValue = GetCellValue(cell, workbookPart);
+                if (cellValue.Equals(columnName, StringComparison.OrdinalIgnoreCase))
+                {
+                    return GetColumnIndex(cell.CellReference.Value);
+                }
+            }
+        }
+        return null;
+    }
+
+    protected int? FindHeaderRow(SheetData sheetData, WorkbookPart workbookPart)
+    {
+        foreach (var row in sheetData.Elements<Row>().Take(_options.MaxHeaderSearchRows))
+        {
+            foreach (var cell in row.Elements<Cell>())
+            {
+                if (cell.CellReference == null || string.IsNullOrEmpty(cell.CellReference.Value))
+                    continue;
+
+                var cellValue = GetCellValue(cell, workbookPart);
+                if (!string.IsNullOrEmpty(cellValue))
+                {
+                    return row.RowIndex?.Value != null ? (int)row.RowIndex.Value : 1;
+                }
+            }
+        }
+        return null;
     }
 }

@@ -1,0 +1,14 @@
+<div class="card shadow-sm h-100">
+    <div class="card-header @HeaderClass">
+        <h2 class="mb-0 h5">@Title</h2>
+    </div>
+    <div class="card-body text-center p-4">
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; } = string.Empty;
+    [Parameter] public string HeaderClass { get; set; } = "bg-primary text-white";
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}
