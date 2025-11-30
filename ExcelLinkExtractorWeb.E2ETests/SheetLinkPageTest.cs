@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Sockets;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 using NUnit.Framework;
+using System.Linq;
 
 namespace ExcelLinkExtractorWeb.E2ETests;
 
@@ -14,6 +16,7 @@ public abstract class SheetLinkPageTest : PageTest
 {
     private static Process? _serverProcess;
     private static string? _baseUrl;
+    private static readonly List<string> _serverLogs = new();
 
     protected static string BaseUrl => _baseUrl ?? "http://localhost:5050";
 
@@ -48,18 +51,42 @@ public abstract class SheetLinkPageTest : PageTest
             throw new InvalidOperationException("Failed to start SheetLink server for E2E tests.");
         }
 
+        _serverProcess.OutputDataReceived += (_, args) =>
+        {
+            if (!string.IsNullOrWhiteSpace(args.Data))
+            {
+                _serverLogs.Add(args.Data);
+            }
+        };
+        _serverProcess.ErrorDataReceived += (_, args) =>
+        {
+            if (!string.IsNullOrWhiteSpace(args.Data))
+            {
+                _serverLogs.Add(args.Data);
+            }
+        };
+        _serverProcess.BeginOutputReadLine();
+        _serverProcess.BeginErrorReadLine();
+
         // Wait for the server to respond
         using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(2) };
         var started = false;
         for (var i = 0; i < 120 && !started; i++)
         {
+            if (_serverProcess.HasExited)
+            {
+                var log = string.Join(Environment.NewLine, _serverLogs.TakeLast(40));
+                throw new InvalidOperationException($"SheetLink server exited early with code {_serverProcess.ExitCode}. Recent log:{Environment.NewLine}{log}");
+            }
+
             try
             {
                 var response = await client.GetAsync(BaseUrl);
                 if ((int)response.StatusCode < 500)
                 {
                     var html = await response.Content.ReadAsStringAsync();
-                    started = html.Length > 0 || response.IsSuccessStatusCode;
+                    // Treat any non-error (including redirects) as a signal that the server is alive
+                    started = response.IsSuccessStatusCode || (int)response.StatusCode < 400 || html.Length > 0;
                     if (started) break;
                 }
             }
@@ -73,7 +100,8 @@ public abstract class SheetLinkPageTest : PageTest
         if (!started)
         {
             StopServer();
-            throw new InvalidOperationException("SheetLink server did not become ready for E2E tests.");
+            var log = string.Join(Environment.NewLine, _serverLogs.TakeLast(40));
+            throw new InvalidOperationException($"SheetLink server did not become ready for E2E tests. Recent log:{Environment.NewLine}{log}");
         }
     }
 

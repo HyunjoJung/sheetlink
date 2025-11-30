@@ -24,7 +24,9 @@ Free online tool to extract hyperlinks from spreadsheet files and merge Title + 
 
 - **Backend**: ASP.NET Core 10.0 (Blazor Server)
 - **Excel Processing**: DocumentFormat.OpenXml (Microsoft official)
-- **Deployment**: Cloudflare Tunnel
+- **Deployment**: Docker + Cloudflare Tunnel
+- **CI/CD**: GitHub Actions (automated Docker builds)
+- **Container Registry**: Docker Hub
 - **Hosting**: Self-hosted on Ubuntu 24.04
 
 ## Quick Start
@@ -73,6 +75,11 @@ docker run -d -p 5050:5050 hyunjojung/sheetlink:latest
 docker compose up -d
 # App listens on http://localhost:5050
 ```
+
+**Automated Deployment:**
+- Docker images are automatically built on every push to master via GitHub Actions
+- Published to [hyunjojung/sheetlink](https://hub.docker.com/r/hyunjojung/sheetlink) on Docker Hub
+- Deploy to production server using `./scripts/deploy.sh`
 
 See [Docker Deployment Guide](docs/DOCKER_DEPLOYMENT.md) for production deployment.
 

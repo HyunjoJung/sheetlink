@@ -96,21 +96,9 @@
             </div>
         </div>
 
-        <!-- How to use -->
-        <div class="card shadow-sm mt-4">
-            <div class="card-body">
-                <h2 class="card-title h5">How to Use</h2>
-                <ol class="mb-0">
-                    <li>Download the sample or prepare your spreadsheet file</li>
-                    <li>Add hyperlinks to the 'Title' column</li>
-                    <li>Upload the file to extract links automatically</li>
-                    <li>Download the result file</li>
-                </ol>
-                <div class="mt-3 text-center">
-                    <a href="/faq" class="btn btn-outline-primary">FAQ</a>
-                </div>
-            </div>
-        </div>
+        <HowToUseCard Steps="@GetExtractSteps()"
+            CallToActionText="FAQ"
+            CallToActionHref="/faq" />
     }
 </div>
 
@@ -275,4 +263,12 @@
         public string Title { get; set; } = "";
         public string Url { get; set; } = "";
     }
+
+    private static IEnumerable<string> GetExtractSteps() => new[]
+    {
+        "Download the sample or prepare your spreadsheet file",
+        "Add hyperlinks to the 'Title' column",
+        "Upload the file to extract links automatically",
+        "Download the result file"
+    };
 }

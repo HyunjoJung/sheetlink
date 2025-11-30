@@ -1,0 +1,23 @@
+<div class="card shadow-sm mt-4">
+    <div class="card-body">
+        <h2 class="card-title h5">How to Use</h2>
+        <ol class="mb-0">
+            @foreach (var step in Steps)
+            {
+                <li>@step</li>
+            }
+        </ol>
+        @if (!string.IsNullOrWhiteSpace(CallToActionText) && !string.IsNullOrWhiteSpace(CallToActionHref))
+        {
+            <div class="mt-3 text-center">
+                <a href="@CallToActionHref" class="btn btn-outline-primary">@CallToActionText</a>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public IEnumerable<string> Steps { get; set; } = Enumerable.Empty<string>();
+    [Parameter] public string? CallToActionText { get; set; }
+    [Parameter] public string? CallToActionHref { get; set; }
+}

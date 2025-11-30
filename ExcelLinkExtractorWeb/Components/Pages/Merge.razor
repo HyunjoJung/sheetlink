@@ -96,21 +96,9 @@
             </div>
         </div>
 
-        <!-- How to use -->
-        <div class="card shadow-sm mt-4">
-            <div class="card-body">
-                <h2 class="card-title h5">How to Use</h2>
-                <ol class="mb-0">
-                    <li>Download the sample or prepare your spreadsheet file</li>
-                    <li>Add your titles in the 'Title' column</li>
-                    <li>Add corresponding URLs in the 'URL' column</li>
-                    <li>Upload the file to create clickable hyperlinks</li>
-                </ol>
-                <div class="mt-3 text-center">
-                    <a href="/faq" class="btn btn-outline-primary">FAQ</a>
-                </div>
-            </div>
-        </div>
+        <HowToUseCard Steps="@GetMergeSteps()"
+            CallToActionText="FAQ"
+            CallToActionHref="/faq" />
     }
 </div>
 
@@ -128,6 +116,14 @@
     {
         new ResultCard.ResultStat("Total Rows", result?.TotalRows.ToString() ?? "0", "text-success"),
         new ResultCard.ResultStat("Hyperlinks Created", result?.LinksCreated.ToString() ?? "0", "text-primary")
+    };
+
+    private static IEnumerable<string> GetMergeSteps() => new[]
+    {
+        "Download the sample or prepare your spreadsheet file",
+        "Add your titles in the 'Title' column",
+        "Add corresponding URLs in the 'URL' column",
+        "Upload the file to create clickable hyperlinks"
     };
 
     protected override void OnInitialized()
