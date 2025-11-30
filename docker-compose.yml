@@ -7,5 +7,6 @@ services:
       - "5050:5050"
     environment:
       ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: "http://+:5050"
       ExcelProcessing__RateLimitPerMinute: 500
     restart: unless-stopped
