@@ -27,9 +27,9 @@ public class ExtractLinksPageTests : SheetLinkPageTest
         await Page.GotoAsync(BaseUrl);
         await WaitForHomeInteractiveAsync();
 
-        // Check navigation links
-        var extractLink = Page.Locator(".navbar-nav").GetByRole(AriaRole.Link, new() { Name = "Extract Links" });
-        var mergeLink = Page.Locator(".navbar-nav").GetByRole(AriaRole.Link, new() { Name = "Merge Links" });
+        // Check navigation links (match current labels)
+        var extractLink = Page.Locator(".navbar-nav-mobile").GetByRole(AriaRole.Link, new() { Name = "Extract" });
+        var mergeLink = Page.Locator(".navbar-nav-mobile").GetByRole(AriaRole.Link, new() { Name = "Merge" });
 
         await Expect(extractLink).ToBeVisibleAsync(new() { Timeout = 10000 });
         await Expect(mergeLink).ToBeVisibleAsync(new() { Timeout = 10000 });
@@ -77,8 +77,8 @@ public class ExtractLinksPageTests : SheetLinkPageTest
         await Page.GotoAsync(BaseUrl);
         await WaitForHomeInteractiveAsync();
 
-        // Check if FAQ link is visible
-        var faqLink = Page.Locator("a[href='/faq']");
+        // Check nav FAQ link (avoid duplicate button strict mode)
+        var faqLink = Page.Locator(".navbar-nav-mobile").GetByRole(AriaRole.Link, new() { Name = "FAQ" });
         await Expect(faqLink).ToBeVisibleAsync();
     }
 

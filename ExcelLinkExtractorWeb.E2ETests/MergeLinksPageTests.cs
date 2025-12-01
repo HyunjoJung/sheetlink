@@ -55,7 +55,7 @@ public class MergeLinksPageTests : SheetLinkPageTest
         await Expect(homeHeading).ToBeVisibleAsync(new() { Timeout = 10000 });
 
         // Navigate to Merge page
-        var mergeLink = Page.Locator(".navbar-nav").GetByRole(AriaRole.Link, new() { Name = "Merge Links" });
+        var mergeLink = Page.Locator(".navbar-nav-mobile").GetByRole(AriaRole.Link, new() { Name = "Merge" });
         await mergeLink.ClickAsync();
         await WaitForMergeInteractiveAsync();
 
@@ -64,7 +64,7 @@ public class MergeLinksPageTests : SheetLinkPageTest
         await Expect(mergeHeading).ToBeVisibleAsync(new() { Timeout = 10000 });
 
         // Navigate back to Extract page
-        var extractLink = Page.Locator(".navbar-nav").GetByRole(AriaRole.Link, new() { Name = "Extract Links" });
+        var extractLink = Page.Locator(".navbar-nav-mobile").GetByRole(AriaRole.Link, new() { Name = "Extract" });
         await extractLink.ClickAsync();
         await WaitForHomeInteractiveAsync();
 

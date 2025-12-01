@@ -71,7 +71,7 @@ public abstract class SheetLinkPageTest : PageTest
         // Wait for the server to respond
         using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(2) };
         var started = false;
-        for (var i = 0; i < 120 && !started; i++)
+        for (var i = 0; i < 240 && !started; i++)
         {
             if (_serverProcess.HasExited)
             {
